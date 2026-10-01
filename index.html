@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Syphr // Ephemeral P2P Web Chat</title>
+    <meta name="description" content="Syphr - Ephemeral Peer-to-Peer Web Chat with RAM-only sessions, zero disk retention, and auto WebRTC handshake." />
+    <meta property="og:title" content="Syphr // Ephemeral P2P Web Chat" />
+    <meta property="og:description" content="Syphr - Ephemeral Peer-to-Peer Web Chat with RAM-only sessions, zero disk retention, and auto WebRTC handshake." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- Required CDNs -->
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <!-- Emergency Flash Overlay -->
+    <div id="nuke-flash"></div>
+
+    <div id="app-shell">
+      <!-- Master Top Header: Apple/Notion Clean Single Flex Row -->
+      <header id="app-header">
+        <div class="header-left">
+          <div class="brand-badge" id="brand-badge">
+            <div class="logo-glyph" id="logo-glyph">
+              <i data-lucide="message-circle" style="width: 15px; height: 15px;"></i>
+            </div>
+            <span class="brand-title">Syphr</span>
+          </div>
+
+          <!-- Connection Status: 6px status dot with connection text in var(--text-muted) -->
+          <div class="connection-pill waiting" id="connection-pill">
+            <span class="pulse-dot"></span>
+            <span id="connection-text">Waiting for Peer...</span>
+          </div>
+        </div>
+
+        <!-- Right: Minimalist action icons rendered as clean icon-only ghost buttons -->
+        <div class="header-right">
+          <button class="btn-icon" id="btn-mute" title="Toggle audio haptics" aria-label="Toggle audio">
+            <i data-lucide="volume-2" id="mute-icon" style="width: 15px; height: 15px;"></i>
+          </button>
+
+          <button class="btn-icon" id="btn-share" title="Share invite or scan QR" aria-label="Share invite">
+            <i data-lucide="share-2" style="width: 15px; height: 15px;"></i>
+          </button>
+
+          <button class="btn-icon" id="btn-settings" title="User Settings & Identity" aria-label="User Settings">
+            <i data-lucide="settings" style="width: 15px; height: 15px;"></i>
+          </button>
+
+          <button class="btn-panic" id="btn-panic" title="Emergency RAM incineration and exit" aria-label="Panic wipe">
+            <i data-lucide="flame" style="width: 14px; height: 14px;"></i>
+            <span class="btn-label">NUKE</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Sub-Bar: Identity & Channel Controls (Borderless Typography) -->
+      <nav id="sub-bar" aria-label="Channel Context">
+        <div class="identity-cluster">
+          <!-- Local User Identity with Inline Editing & Procedural SVG Avatar -->
+          <div class="user-identity-card" id="user-identity-card">
+            <div class="avatar-ring-container" id="user-avatar" title="Procedural SVG avatar ring"></div>
+            <div class="handle-inline-wrapper" id="handle-inline-wrapper">
+              <span class="user-handle-text" id="user-handle-text" title="Click to edit nickname inline">ghost-protocol#402</span>
+              <button type="button" class="btn-subtle-icon" id="btn-edit-handle" title="Edit nickname inline" aria-label="Edit nickname">
+                <i data-lucide="pencil" style="width: 12px; height: 12px;"></i>
+              </button>
+              <button type="button" class="btn-subtle-icon" id="btn-reroll-handle" title="Auto-generate cool cyber handle" aria-label="Randomize handle">
+                <i data-lucide="dices" style="width: 13px; height: 13px;"></i>
+              </button>
+              <input type="text" id="handle-inline-input" class="inline-handle-input hidden" maxlength="24" spellcheck="false" autocomplete="off" aria-label="Nickname inline input" />
+              <button type="button" class="btn-subtle-icon btn-save-handle hidden" id="btn-save-inline-handle" title="Save nickname (Enter)" aria-label="Save nickname">
+                <i data-lucide="check" style="width: 13px; height: 13px; color: var(--accent-emerald);"></i>
+              </button>
+              <button type="button" class="btn-subtle-icon btn-cancel-handle hidden" id="btn-cancel-inline-handle" title="Cancel (Esc)" aria-label="Cancel editing">
+                <i data-lucide="x" style="width: 13px; height: 13px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Peer Identity with Procedural SVG Avatar -->
+          <div class="peer-identity-card" id="peer-identity-card">
+            <div class="avatar-ring-container" id="peer-avatar"></div>
+            <span class="user-handle-text" id="peer-handle-text">Awaiting Peer...</span>
+          </div>
+        </div>
+
+        <div class="channel-controls">
+          <!-- Ephemeral Burn Timer Selector -->
+          <div class="burn-timer-group">
+            <div class="burn-label">
+              <i data-lucide="flame" style="width: 13px; height: 13px;"></i>
+              <span>Burn:</span>
+            </div>
+            <select class="burn-select" id="burn-timer-select" title="Auto-dissolve countdown for sent messages">
+              <option value="keep" selected>Keep for Session</option>
+              <option value="15s">15s Timer</option>
+              <option value="60s">60s Timer</option>
+              <option value="burn_on_read">Instant / Burn on Read (5s)</option>
+            </select>
+          </div>
+
+          <!-- Quick Room Hash Copy Button: Minimalist borderless button -->
+          <button class="btn-ghost-link" id="btn-copy-room-id" title="Copy room link">
+            <i data-lucide="link" style="width: 12px; height: 12px;"></i>
+            <span id="room-id-display">#room=init</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Chat Stage -->
+      <main id="chat-stage">
+        <!-- Drag and Drop Staging Overlay -->
+        <div id="drag-overlay">
+          <div class="drag-icon-glow">
+            <i data-lucide="upload-cloud" style="width: 36px; height: 36px;"></i>
+          </div>
+          <p style="font-family: var(--font-mono); font-size: 16px; font-weight: 600;">
+            Drop files or images to encrypt &amp; stream directly to peer
+          </p>
+        </div>
+
+        <!-- Scrollable Message Stream -->
+        <div id="message-stream">
+          <!-- Empty State / Welcome Card -->
+          <div class="welcome-card" id="welcome-card">
+            <button class="welcome-close-btn" id="welcome-close-btn" aria-label="Dismiss info card" title="Dismiss">
+              <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+            </button>
+            <div class="welcome-icon-wrap">
+              <i data-lucide="shield-check" style="width: 26px; height: 26px;"></i>
+            </div>
+            <h1 class="welcome-title">Zero-Disk Ephemeral Channel</h1>
+            <p class="welcome-desc">
+              Direct WebRTC peer-to-peer data tunnel. Messages, code, and files travel exclusively across encrypted memory streams. When either tab closes, all data is immediately incinerated.
+            </p>
+
+            <div class="security-highlights">
+              <div class="highlight-box">
+                <h4><i data-lucide="cpu" style="width: 12px; height: 12px;"></i> RAM-Only</h4>
+                <p>Zero LocalStorage, zero cookies, zero IndexedDB writes. Everything vanishes on reload.</p>
+              </div>
+              <div class="highlight-box">
+                <h4><i data-lucide="lock" style="width: 12px; height: 12px;"></i> Direct P2P</h4>
+                <p>Direct DTLS/SCTP WebRTC channels with zero intermediary message relay server.</p>
+              </div>
+              <div class="highlight-box">
+                <h4><i data-lucide="flame" style="width: 12px; height: 12px;"></i> Self-Destruct</h4>
+                <p>Timed message dissolution, synchronized burn triggers, and emergency 1-key purge.</p>
+              </div>
+            </div>
+
+            <div class="welcome-actions">
+              <button class="btn-primary" id="welcome-copy-link">
+                <i data-lucide="copy" style="width: 15px; height: 15px;"></i>
+                <span>Copy Invite Link</span>
+              </button>
+              <button class="btn-pill" id="welcome-show-qr">
+                <i data-lucide="qr-code" style="width: 15px; height: 15px; color: var(--accent-cyan);"></i>
+                <span>Show Mobile QR Code</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Peer Typing Indicator -->
+        <div id="typing-indicator">
+          <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+          <span id="typing-text">peer is typing...</span>
+        </div>
+
+        <!-- Stealth Blur Overlay -->
+        <div id="stealth-blur-overlay">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--text-muted); font-family: var(--font-sans);">
+            <i data-lucide="eye-off" style="width: 24px; height: 24px;"></i>
+            <span style="font-size: 13px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;">Stealth Mode Active</span>
+          </div>
+        </div>
+      </main>
+
+      <!-- Sticky Safe-Area Input Dock -->
+      <footer id="input-dock">
+        <!-- Floating Attachment Menu -->
+        <div id="attachment-menu" class="attachment-menu hidden">
+          <button type="button" class="attachment-menu-item" id="attach-view-once">
+            <i data-lucide="eye-off" style="width: 14px; height: 14px; color: var(--accent-amber);"></i>
+            <span>Send View-Once Image</span>
+          </button>
+          <button type="button" class="attachment-menu-item" id="attach-document">
+            <i data-lucide="file" style="width: 14px; height: 14px;"></i>
+            <span>Send Document</span>
+          </button>
+          <button type="button" class="attachment-menu-item" id="attach-code">
+            <i data-lucide="code" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
+            <span>Send Code Snippet</span>
+          </button>
+        </div>
+
+        <!-- Staged Attachment Preview -->
+        <div id="staged-attachment">
+          <img class="staged-thumb" id="staged-thumb" src="" alt="preview" style="display: none;" />
+          <span class="staged-info" id="staged-info">attachment.png</span>
+          <button class="staged-remove-btn" id="staged-remove-btn" title="Remove attachment">
+            <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+          </button>
+        </div>
+
+        <div class="input-container">
+          <input type="file" id="file-input" hidden accept="image/*,.pdf,.txt,.zip,.json,.js,.ts,.py,.md,.csv" />
+          <button class="input-action-btn" id="btn-attach" title="Attachment Options" aria-label="Attach file">
+            <i data-lucide="paperclip" style="width: 18px; height: 18px;"></i>
+          </button>
+
+          <button class="input-action-btn" id="btn-mic" title="Record voice note (click to toggle)" aria-label="Record voice note">
+            <i data-lucide="mic" style="width: 18px; height: 18px;"></i>
+          </button>
+
+          <textarea
+            id="message-input"
+            rows="1"
+            placeholder="Type encrypted message (Enter to send, markdown supported)..."
+            aria-label="Message input"
+          ></textarea>
+
+          <button class="send-btn" id="btn-send" title="Send message" aria-label="Send message">
+            <i data-lucide="arrow-up" style="width: 18px; height: 18px; stroke-width: 2.5;"></i>
+          </button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="modal-backdrop" id="qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title" id="qr-modal-title">
+            <i data-lucide="qr-code" style="width: 18px; height: 18px; color: var(--accent-cyan);"></i>
+            <span>Scan to Join P2P Room</span>
+          </h2>
+          <button class="modal-close-btn" id="close-qr-modal" aria-label="Close modal">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+        <div class="qr-container">
+          <div class="qr-box" id="qr-code-target"></div>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+            Scan with any phone camera to establish an instant direct P2P link with this room.
+          </p>
+          <div class="qr-url-chip" id="qr-url-chip">https://...</div>
+          <button class="btn-primary" id="btn-copy-qr-url" style="width: 100%; justify-content: center;">
+            <i data-lucide="copy" style="width: 15px; height: 15px;"></i>
+            <span>Copy Absolute Link</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Settings & Identity Modal -->
+    <div class="modal-backdrop" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+      <div class="modal-card settings-card">
+        <div class="modal-header">
+          <h2 class="modal-title" id="settings-modal-title">
+            <i data-lucide="sliders-horizontal" style="width: 18px; height: 18px; color: var(--accent-cyan);"></i>
+            <span>User Settings &amp; Identity</span>
+          </h2>
+          <button class="modal-close-btn" id="close-settings-modal" aria-label="Close settings">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+
+        <div class="settings-modal-body">
+          <!-- 1. Display Handle Changer with Procedural Avatar Preview -->
+          <div class="settings-field-group">
+            <div class="settings-field-header">
+              <label class="settings-label" for="settings-handle-input">
+                <i data-lucide="user" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
+                <span>Display Handle</span>
+              </label>
+              <span class="settings-badge">RAM Only</span>
+            </div>
+            <div class="settings-handle-input-wrap">
+              <div class="avatar-ring-container settings-preview-avatar" id="settings-avatar-preview"></div>
+              <input
+                type="text"
+                id="settings-handle-input"
+                maxlength="24"
+                placeholder="ghost-protocol#402"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button class="btn-icon" id="btn-settings-random-handle" title="Generate cool cyber handle" aria-label="Random handle">
+                <i data-lucide="dices" style="width: 18px; height: 18px;"></i>
+              </button>
+            </div>
+            <p class="settings-subtext">Auto-generate cyber handles or type your own. Updates avatar ring by nickname hash.</p>
+          </div>
+
+          <!-- 2. Avatar Style / Emoji Selector (Clean 4x4 Grid) -->
+          <div class="settings-field-group">
+            <div class="settings-field-header">
+              <label class="settings-label">
+                <i data-lucide="smile" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
+                <span>Avatar / Emoji Identifier</span>
+              </label>
+              <span class="settings-subtext">4x4 Grid Picker</span>
+            </div>
+            <div class="avatar-emoji-picker" id="avatar-emoji-picker">
+              <button type="button" class="emoji-select-btn active" data-emoji="" title="Procedural SVG Ring + Monogram Initials">👤</button>
+              <button type="button" class="emoji-select-btn" data-emoji="👻" title="Ghost">👻</button>
+              <button type="button" class="emoji-select-btn" data-emoji="⚡" title="Lightning">⚡</button>
+              <button type="button" class="emoji-select-btn" data-emoji="👾" title="Invader">👾</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🛡️" title="Shield">🛡️</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🔮" title="Orb">🔮</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🐱" title="Cyber Cat">🐱</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🦊" title="Fox">🦊</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🤖" title="Robot">🤖</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🛸" title="UFO">🛸</button>
+              <button type="button" class="emoji-select-btn" data-emoji="💀" title="Skull">💀</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🧬" title="DNA">🧬</button>
+              <button type="button" class="emoji-select-btn" data-emoji="📡" title="Satellite">📡</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🌐" title="Global">🌐</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🔑" title="Key">🔑</button>
+              <button type="button" class="emoji-select-btn" data-emoji="🔒" title="Lock">🔒</button>
+            </div>
+          </div>
+
+          <!-- 3. Visual Theme Preset Switcher (Dark, Light, Neon Pulse) -->
+          <div class="settings-field-group">
+            <div class="settings-field-header">
+              <label class="settings-label">
+                <i data-lucide="palette" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
+                <span>Visual Theme Preset</span>
+              </label>
+              <span class="settings-subtext">Instant live preview</span>
+            </div>
+            <div class="theme-toggle-container" role="radiogroup" aria-label="Visual theme">
+              <button type="button" class="theme-option-btn active" data-theme="dark" id="theme-opt-dark" role="radio" aria-checked="true">
+                <span class="theme-preview-swatch swatch-dark"></span>
+                <span class="theme-name">Dark</span>
+              </button>
+              <button type="button" class="theme-option-btn" data-theme="light" id="theme-opt-light" role="radio" aria-checked="false">
+                <span class="theme-preview-swatch swatch-light"></span>
+                <span class="theme-name">Light</span>
+              </button>
+              <button type="button" class="theme-option-btn" data-theme="neon" id="theme-opt-neon" role="radio" aria-checked="false">
+                <span class="theme-preview-swatch swatch-neon"></span>
+                <span class="theme-name">Neon Pulse</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Security & Privacy (Stealth Blur Toggle) -->
+          <div class="settings-field-group">
+            <div class="settings-field-header">
+              <label class="settings-label">
+                <i data-lucide="shield-alert" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
+                <span>Security &amp; Privacy</span>
+              </label>
+            </div>
+            <div class="privacy-control-row">
+              <div class="privacy-info">
+                <span class="privacy-title">Stealth Blur</span>
+                <p class="settings-subtext">Apply high-grade obscuring blur whenever this window loses focus or is hidden.</p>
+              </div>
+              <label class="switch-toggle" for="stealth-blur-toggle">
+                <input type="checkbox" id="stealth-blur-toggle" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Save Button -->
+          <button class="btn-primary" id="btn-save-settings" style="width: 100%; justify-content: center; margin-top: 6px;">
+            <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+            <span>Save &amp; Apply Settings</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code Snippet Modal -->
+    <div class="modal-backdrop" id="code-snippet-modal" role="dialog" aria-modal="true" aria-labelledby="code-snippet-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title" id="code-snippet-title">
+            <i data-lucide="code" style="width: 18px; height: 18px; color: var(--accent-cyan);"></i>
+            <span>Send Code Snippet</span>
+          </h2>
+          <button class="modal-close-btn" id="close-code-modal" aria-label="Close modal">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+        <div class="settings-modal-body">
+          <div class="settings-field-group">
+            <label class="settings-label">Language</label>
+            <select id="code-lang-select" style="background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px; border-radius: 6px; outline: none; width: 100%;">
+              <option value="javascript">JavaScript</option>
+              <option value="typescript">TypeScript</option>
+              <option value="python">Python</option>
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="rust">Rust</option>
+              <option value="go">Go</option>
+              <option value="bash">Bash</option>
+              <option value="json">JSON</option>
+              <option value="text">Plain Text</option>
+            </select>
+          </div>
+          <div class="settings-field-group">
+            <label class="settings-label">Code Content</label>
+            <textarea id="code-snippet-textarea" rows="8" placeholder="Paste or write your code snippet here..." style="background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 13px; resize: none; outline: none; width: 100%;"></textarea>
+          </div>
+          <button class="btn-primary" id="btn-send-code" style="justify-content: center; width: 100%; margin-top: 6px;">
+            <i data-lucide="send" style="width: 16px; height: 16px;"></i>
+            <span>Transmit Code Snippet</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="modal-backdrop" id="lightbox-modal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <div class="modal-header" style="width: 100%;">
+          <span style="font-size: 13px; font-family: var(--font-mono); color: var(--text-muted);">Ephemeral Media Lightbox</span>
+          <button class="modal-close-btn" id="close-lightbox-modal" aria-label="Close lightbox">
+            <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+          </button>
+        </div>
+        <img id="lightbox-img" src="" alt="Full view" />
+      </div>
+    </div>
+
+    <!-- Toast Notifications Area -->
+    <div id="toast-container"></div>
+
+    <!-- Main Logic Script -->
+    <script type="module" src="/script.js"></script>
+  </body>
+</html>
