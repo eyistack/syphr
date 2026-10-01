@@ -1,5 +1,7 @@
 # Syphr
 
+An ephemeral, zero-retention peer-to-peer web chat application powered by direct DTLS-encrypted WebRTC data channels for private, in-memory messaging with zero server storage.
+
 ***Live Site:*** [https://syphr.pages.dev](https://syphr.pages.dev)
 
 ---
