@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+    <title>Terms of Service // Syphr Ephemeral P2P Chat</title>
+    <meta name="description" content="Terms of Service for Syphr - Ephemeral peer-to-peer web chat with volatile RAM-only communication and zero disk retention." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Main App Stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body class="legal-page-body">
+    <!-- Legal Top Navigation -->
+    <header class="legal-header-bar">
+      <a href="/" class="legal-brand" title="Return to Syphr Chat">
+        <div class="logo-glyph" style="width: 22px; height: 22px; border: 1px solid var(--border); border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center;">
+          <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
+        </div>
+        <span>Syphr</span>
+      </a>
+
+      <div class="legal-nav-actions">
+        <a href="/privacy" class="legal-nav-btn">Privacy Policy</a>
+        <button type="button" class="legal-nav-btn" id="theme-toggle-btn" title="Toggle theme" aria-label="Toggle theme">
+          <i data-lucide="sun-moon" style="width: 14px; height: 14px;"></i>
+        </button>
+        <a href="/" class="legal-nav-btn primary">
+          <span>Open Chat</span>
+          <i data-lucide="arrow-right" style="width: 13px; height: 13px;"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="legal-container">
+      <div class="legal-hero">
+        <div class="legal-badge">
+          <i data-lucide="file-text" style="width: 13px; height: 13px;"></i>
+          <span>Usage Agreement</span>
+        </div>
+        <h1 class="legal-title">Terms of Service</h1>
+        <p class="legal-subtitle">Effective Date: October 4, 2026 &bull; Version 1.0 &bull; Syphr Protocol</p>
+      </div>
+
+      <!-- Quick Navigation Tabs -->
+      <nav class="legal-tab-nav" aria-label="Legal documents navigation">
+        <a href="/privacy" class="legal-tab-item">Privacy Policy</a>
+        <a href="/terms" class="legal-tab-item active">Terms of Service</a>
+      </nav>
+
+      <!-- Key Callout -->
+      <div class="legal-callout">
+        <div style="font-weight: 600; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+          <i data-lucide="alert-circle" style="width: 15px; height: 15px; color: var(--accent-amber);"></i>
+          <span>Notice Regarding Ephemeral Communications</span>
+        </div>
+        Syphr is an ephemeral, peer-to-peer web chat. We do not store, archive, or back up any conversations, files, or audio notes. Once a session ends or the tab is closed, your messages are permanently erased. There is no technical recovery mechanism.
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="legal-card-grid">
+        <div class="legal-card">
+          <div class="legal-card-title">
+            <i data-lucide="user-check" style="width: 15px; height: 15px; color: var(--accent-emerald);"></i>
+            <span>User Autonomy</span>
+          </div>
+          <div class="legal-card-desc">You retain full responsibility for the data and files you choose to transmit to peers across the WebRTC connection.</div>
+        </div>
+        <div class="legal-card">
+          <div class="legal-card-title">
+            <i data-lucide="flame" style="width: 15px; height: 15px; color: var(--accent-crimson);"></i>
+            <span>Irreversible Eradication</span>
+          </div>
+          <div class="legal-card-desc">Closing your browser or triggering the emergency NUKE protocol instantly and irreversibly destroys volatile session state.</div>
+        </div>
+        <div class="legal-card">
+          <div class="legal-card-title">
+            <i data-lucide="scale" style="width: 15px; height: 15px; color: var(--accent-cyan);"></i>
+            <span>No Server Intermediary</span>
+          </div>
+          <div class="legal-card-desc">Messages travel directly between devices. Syphr operates as a client-side interface with no central message storage server.</div>
+        </div>
+      </div>
+
+      <!-- Section 1 -->
+      <section class="legal-section">
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing or utilizing the Syphr web application, client interfaces, or associated services (collectively, the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree with any provision of these Terms, you must immediately cease accessing and using the Service.</p>
+      </section>
+
+      <!-- Section 2 -->
+      <section class="legal-section">
+        <h2>2. Description of the Service</h2>
+        <p>Syphr is a decentralized, serverless communication interface that leverages standard browser WebRTC APIs (RTCPeerConnection and RTCDataChannel) to facilitate direct, encrypted peer-to-peer messaging, audio transmission, and file sharing. You expressly understand and agree that:</p>
+        <ul>
+          <li>Syphr does not host a centralized database or permanent message repository.</li>
+          <li>Communications take place in volatile device memory (RAM) and are not retained across page reloads or tab closures.</li>
+          <li>Neither Syphr nor any third party possesses the cryptographic keys or database records necessary to recover discarded session data.</li>
+        </ul>
+      </section>
+
+      <!-- Section 3 -->
+      <section class="legal-section">
+        <h2>3. Acceptable Use Policy</h2>
+        <p>You agree to use Syphr only for lawful, ethical communication. You agree that you will NOT use the Service to:</p>
+        <ul>
+          <li>Transmit, disseminate, or promote content that is illegal, defamatory, harmful, threatening, or infringing upon the intellectual property rights of others.</li>
+          <li>Distribute viruses, malware, trojans, ransomware, or other malicious computer code via peer file transfers.</li>
+          <li>Engage in harassment, stalking, or non-consensual surveillance of any person.</li>
+          <li>Attempt to reverse-engineer, disrupt, flood, or bypass standard WebRTC signaling protocols to cause service denial or degradation for other users.</li>
+          <li>Impersonate any individual, organization, or entity in a manner intended to deceive or defraud peers.</li>
+        </ul>
+      </section>
+
+      <!-- Section 4 -->
+      <section class="legal-section">
+        <h2>4. User Responsibility for Shared Content</h2>
+        <p>Because communications occur directly between endpoints without server-side inspection or content filtering, you acknowledge and agree that:</p>
+        <ul>
+          <li>You are solely responsible for all content, text, media, audio, or files you transmit to peers.</li>
+          <li>You are solely responsible for verifying the identity of any peer with whom you share a room link or QR code. Anyone who accesses your room link can connect to your session until the link expires or is severed.</li>
+          <li>Syphr operators have no technological capability or legal obligation to monitor, moderate, or remove content exchanged across direct peer channels.</li>
+        </ul>
+      </section>
+
+      <!-- Section 5 -->
+      <section class="legal-section">
+        <h2>5. Network &amp; Peer-to-Peer Disclaimers</h2>
+        <p>WebRTC relies on direct socket communication between user machines. Under certain network configurations (e.g., restrictive enterprise symmetric NATs or firewalls), peer connection establishment may fail without a relay server. Syphr makes no warranty that a direct peer-to-peer connection will be established or maintained under all network environments.</p>
+        <p>Furthermore, because WebRTC establishes a direct connection between IP endpoints, connecting with another user inherently exposes your network endpoint to that user. Syphr strongly encourages the use of reputable VPNs if IP confidentiality from your peer is required.</p>
+      </section>
+
+      <!-- Section 6 -->
+      <section class="legal-section">
+        <h2>6. Disclaimer of Warranties</h2>
+        <p>THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL MEET YOUR SPECIFIC REQUIREMENTS, BE ERROR-FREE, SECURE, UNINTERRUPTED, OR FREE OF TEMPORARY SIGNALING LATENCY.</p>
+      </section>
+
+      <!-- Section 7 -->
+      <section class="legal-section">
+        <h2>7. Limitation of Liability</h2>
+        <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, UNDER NO CIRCUMSTANCES SHALL THE CREATORS, DEVELOPERS, CONTRIBUTORS, OR HOSTS OF SYPHR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES (INCLUDING, BUT NOT LIMITED TO, LOSS OF DATA, LOSS OF PROFITS, BUSINESS INTERRUPTION, OR TRANSMISSION OF MALICIOUS CODE BY A THIRD-PARTY PEER) ARISING OUT OF OR IN CONNECTION WITH YOUR USE OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+      </section>
+
+      <!-- Section 8 -->
+      <section class="legal-section">
+        <h2>8. Session Termination &amp; The NUKE Protocol</h2>
+        <p>You may terminate your session at any time by closing your browser tab, clearing your browser cache, or pressing the in-app "NUKE" panic button. You acknowledge that initiating this action is final and irrecoverable. Syphr shall not be liable for any lost files or communications resulting from voluntary or accidental termination of a session.</p>
+      </section>
+
+      <!-- Section 9 -->
+      <section class="legal-section">
+        <h2>9. Modifications to the Terms</h2>
+        <p>We reserve the right to revise or modify these Terms at any time by publishing updated versions on this page. Your continued use of Syphr following the posting of revised Terms signifies your binding acceptance of such revisions.</p>
+      </section>
+
+      <!-- Legal Footer -->
+      <footer class="legal-footer">
+        <div>&copy; 2026 Syphr Protocol. Zero-Retention Ephemeral Communication.</div>
+        <div style="display: flex; gap: 16px;">
+          <a href="/privacy" class="legal-footer-link">Privacy Policy</a>
+          <a href="/" class="legal-footer-link">Back to Chat</a>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      // Initialize Lucide icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // Theme synchronization
+      (function() {
+        const storedTheme = localStorage.getItem('syphr_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', storedTheme);
+
+        const toggleBtn = document.getElementById('theme-toggle-btn');
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('syphr_theme', next);
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

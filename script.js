@@ -517,7 +517,7 @@
 
     // Create Peer instance with multiple reliable public STUN fallbacks
     const peer = new window.Peer(myProposedId, {
-      debug: 1,
+      debug: 0,
       config: {
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
@@ -576,19 +576,36 @@
     });
 
     peer.on('error', (err) => {
-      console.warn('[Ghostwire] Peer error encountered:', err.type, err);
+      console.warn('[Ghostwire] Peer notice:', err.type || err.message || err);
       if (err.type === 'peer-unavailable') {
-        if (!state.isHost && connectionAttempts < 4) {
-          showToast(`Host initializing, retrying link (${connectionAttempts}/4)...`, 'refresh-cw');
+        if (connectionRetryTimer) {
+          clearTimeout(connectionRetryTimer);
+          connectionRetryTimer = null;
+        }
+
+        if (!state.isHost && connectionAttempts < 2) {
+          showToast(`Connecting to room host... (attempt ${connectionAttempts}/2)`, 'refresh-cw');
           setTimeout(() => {
-            if (state.activeRoomId) initiateOutgoingConnection(state.activeRoomId);
-          }, 1500);
+            if (state.activeRoomId && !state.peerProfile.connected) {
+              initiateOutgoingConnection(state.activeRoomId);
+            }
+          }, 1200);
         } else {
-          showToast('Host peer is offline or room expired.', 'alert-triangle');
-          updateConnectionBadge('disconnected');
+          showToast('Peer unavailable or room expired. Started new room.', 'info');
+          // Gracefully convert this client into a host of a fresh room
+          state.isHost = true;
+          state.activeRoomId = state.peerId;
+          dom.roomIdDisplay.textContent = '#' + state.peerId;
+          try {
+            history.replaceState(null, '', '#room=' + state.peerId);
+          } catch (e) {
+            window.location.hash = 'room=' + state.peerId;
+          }
+          updateConnectionBadge('waiting');
+          renderPeerIdentity(null);
         }
       } else if (err.type === 'network' || err.type === 'server-error') {
-        showToast('STUN signaling notice. Reconnecting...', 'refresh-cw');
+        showToast('Signaling network notice. Reconnecting...', 'refresh-cw');
       }
     });
 
@@ -601,7 +618,7 @@
   }
 
   function initiateOutgoingConnection(hostId) {
-    if (!state.peer || state.peer.destroyed) return;
+    if (!state.peer || state.peer.destroyed || !hostId) return;
     connectionAttempts++;
 
     console.log(`[Ghostwire] Connecting to peer host ${hostId} (Attempt ${connectionAttempts})`);
@@ -614,16 +631,15 @@
 
       if (connectionRetryTimer) clearTimeout(connectionRetryTimer);
 
-      // Watchdog: If not connected within 3.5 seconds, retry up to 4 times
+      // Watchdog: If not connected within 3.5 seconds, retry once
       connectionRetryTimer = setTimeout(() => {
-        if (!state.peerProfile.connected && connectionAttempts < 4) {
+        if (!state.peerProfile.connected && connectionAttempts < 2) {
           console.log(`[Ghostwire] Connection attempt to ${hostId} timed out, retrying...`);
-          showToast(`Retrying direct P2P link (${connectionAttempts}/4)...`, 'refresh-cw');
           initiateOutgoingConnection(hostId);
         }
       }, 3500);
     } catch (err) {
-      console.error('[Ghostwire] Connect error:', err);
+      console.warn('[Ghostwire] Connect notice:', err);
     }
   }
 
@@ -677,7 +693,7 @@
     });
 
     conn.on('error', (err) => {
-      console.error('[Ghostwire] DataConnection error:', err);
+      console.warn('[Ghostwire] DataConnection notice:', err);
       showToast('Channel notice: ' + (err.message || 'connection issue'), 'alert-circle');
     });
   }

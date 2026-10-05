@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+    <title>Privacy Policy // Syphr Ephemeral P2P Chat</title>
+    <meta name="description" content="Privacy Policy for Syphr - Zero-retention, ephemeral peer-to-peer web chat. No database, no server logs, in-memory volatile encryption." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Main App Stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body class="legal-page-body">
+    <!-- Legal Top Navigation -->
+    <header class="legal-header-bar">
+      <a href="/" class="legal-brand" title="Return to Syphr Chat">
+        <div class="logo-glyph" style="width: 22px; height: 22px; border: 1px solid var(--border); border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center;">
+          <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
+        </div>
+        <span>Syphr</span>
+      </a>
+
+      <div class="legal-nav-actions">
+        <a href="/terms" class="legal-nav-btn">Terms of Service</a>
+        <button type="button" class="legal-nav-btn" id="theme-toggle-btn" title="Toggle theme" aria-label="Toggle theme">
+          <i data-lucide="sun-moon" style="width: 14px; height: 14px;"></i>
+        </button>
+        <a href="/" class="legal-nav-btn primary">
+          <span>Open Chat</span>
+          <i data-lucide="arrow-right" style="width: 13px; height: 13px;"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="legal-container">
+      <div class="legal-hero">
+        <div class="legal-badge">
+          <i data-lucide="shield-check" style="width: 13px; height: 13px;"></i>
+          <span>Zero-Retention Architecture</span>
+        </div>
+        <h1 class="legal-title">Privacy Policy</h1>
+        <p class="legal-subtitle">Effective Date: October 4, 2026 &bull; Version 1.0 &bull; Syphr Protocol</p>
+      </div>
+
+      <!-- Quick Navigation Tabs -->
+      <nav class="legal-tab-nav" aria-label="Legal documents navigation">
+        <a href="/privacy" class="legal-tab-item active">Privacy Policy</a>
+        <a href="/terms" class="legal-tab-item">Terms of Service</a>
+      </nav>
+
+      <!-- Key Guarantee Callout -->
+      <div class="legal-callout">
+        <div style="font-weight: 600; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+          <i data-lucide="lock" style="width: 15px; height: 15px; color: var(--accent);"></i>
+          <span>Our Fundamental Privacy Promise</span>
+        </div>
+        Syphr operates without servers storing your messages or media. We do not maintain a user database, message archive, or user tracking ledger. Your communications are routed peer-to-peer over DTLS-encrypted WebRTC channels and exist strictly in volatile browser RAM.
+      </div>
+
+      <!-- Overview Cards -->
+      <div class="legal-card-grid">
+        <div class="legal-card">
+          <div class="legal-card-title">
+            <i data-lucide="database" style="width: 15px; height: 15px; color: var(--accent-emerald);"></i>
+            <span>No Server Database</span>
+          </div>
+          <div class="legal-card-desc">Zero messages, files, or audio recordings ever touch our server hard drives. There is no central inbox or conversation log.</div>
+        </div>
+        <div class="legal-card">
+          <div class="legal-card-title">
+            <i data-lucide="cpu" style="width: 15px; height: 15px; color: var(--accent-cyan);"></i>
+            <span>In-Memory RAM Only</span>
+          </div>
+          <div class="legal-card-desc">Chat sessions reside solely in your computer's temporary memory. Closing the browser or clicking NUKE erases everything permanently.</div>
+        </div>
+        <div class="legal-card">
+          <div class="legal-card-title">
+            <i data-lucide="eye-off" style="width: 15px; height: 15px; color: var(--accent-amber);"></i>
+            <span>Zero Trackers or Pixels</span>
+          </div>
+          <div class="legal-card-desc">We do not employ third-party advertising cookies, marketing tracking scripts, or behavioral analytics software.</div>
+        </div>
+      </div>
+
+      <!-- Section 1 -->
+      <section class="legal-section">
+        <h2>1. Information We Do Not Collect</h2>
+        <p>Because of our strict peer-to-peer (P2P) architecture, Syphr is engineered deliberately to minimize any point of centralized data ingestion. We explicitly do not collect, retain, sell, or monitor:</p>
+        <ul>
+          <li><strong>Chat Messages &amp; Transcripts:</strong> Text messages are transmitted directly between browsers via WebRTC DataChannels. They are never written to any database.</li>
+          <li><strong>Transferred Media &amp; Files:</strong> Images, documents, and code snippets transmitted between participants are sent as binary chunks directly over P2P channels and never uploaded to cloud buckets.</li>
+          <li><strong>Voice Notes:</strong> Microphone audio recorded via the in-app tool is captured directly into local browser memory, packaged for transmission, and discarded immediately after playback or session close.</li>
+          <li><strong>Personal Identifiers:</strong> We do not require accounts, passwords, telephone numbers, emails, or personal identification to initiate or join chat rooms.</li>
+        </ul>
+      </section>
+
+      <!-- Section 2 -->
+      <section class="legal-section">
+        <h2>2. How Peer-to-Peer Transmission Operates</h2>
+        <p>Syphr establishes direct communication between clients using the WebRTC (Web Real-Time Communication) standard:</p>
+        <ul>
+          <li><strong>Signaling &amp; Handshake:</strong> To establish a direct P2P link, prospective peers exchange cryptographic session descriptions (SDP offers and answers). This handshake is completed via client-generated invite URLs, QR codes, or transient signaling relays.</li>
+          <li><strong>DTLS Encryption:</strong> Data channels between peers are protected using Datagram Transport Layer Security (DTLS), ensuring that intermediate networks or eavesdroppers cannot inspect transmitted message packets.</li>
+          <li><strong>IP Address Exchange:</strong> WebRTC requires peers to exchange network route candidates (ICE candidates) so your browser can discover the direct IP path to your peer. As with all P2P protocols (such as BitTorrent or direct VoIP), your public IP address becomes visible to the peer you connect with. If this is a concern, we recommend using a Virtual Private Network (VPN) or Tor proxy.</li>
+        </ul>
+      </section>
+
+      <!-- Section 3 -->
+      <section class="legal-section">
+        <h2>3. Local Device Storage &amp; Preferences</h2>
+        <p>Syphr explicitly separates ephemeral conversation data from user interface preferences:</p>
+        <ul>
+          <li><strong>No Chat Logging in Storage:</strong> Chat transcripts, photos, and voice notes are never stored in your browser's persistent storage (<code>localStorage</code>, <code>IndexedDB</code>, or cookies).</li>
+          <li><strong>Client-Side UI Preferences:</strong> The application may save benign client-side display preferences in your local browser storage, such as your chosen theme preset (e.g., Dark, Light, Neon Pulse), audio haptic mute preference, or chosen display nickname. This data never leaves your device and can be cleared at any time through your browser settings.</li>
+        </ul>
+      </section>
+
+      <!-- Section 4 -->
+      <section class="legal-section">
+        <h2>4. Device Permissions</h2>
+        <p>Syphr requests only the minimal browser permissions necessary to provide optional features:</p>
+        <ul>
+          <li><strong>Microphone Access (getUserMedia):</strong> If you choose to record an audio note, your browser will prompt you for microphone permission. Audio input is captured strictly while the recording is active. As soon as the recording stops, audio capture hardware is released and all tracks are immediately closed. Audio is never stored on servers or transcribed by third-party speech engines.</li>
+          <li><strong>Camera Access (Optional QR Scanning):</strong> If you use an in-app QR scanner to join a peer room, video stream access is used solely on-device to decode the room connection token and is never recorded or broadcast.</li>
+        </ul>
+      </section>
+
+      <!-- Section 5 -->
+      <section class="legal-section">
+        <h2>5. Instant Data Vaporization (The NUKE Protocol)</h2>
+        <p>Syphr includes an emergency session incineration protocol (the "NUKE" button). When triggered, or when you close the browser tab:</p>
+        <ul>
+          <li>All active WebRTC peer connections and data channels are forcefully severed.</li>
+          <li>In-memory message lists, audio blob buffers, and image object URLs are nullified and released to the browser's garbage collection cycle.</li>
+          <li>DOM elements containing chat history are wiped clean.</li>
+          <li>Because no backup or server copy exists, wiped data is permanently unrecoverable.</li>
+        </ul>
+      </section>
+
+      <!-- Section 6 -->
+      <section class="legal-section">
+        <h2>6. Third-Party Dependencies</h2>
+        <p>The Syphr web client loads required open-source user interface assets from established, reputable Content Delivery Networks (CDNs) including Google Fonts, Lucide Icons, and unpkg. These CDNs receive standard HTTP request headers (such as IP address and User-Agent) solely for the technical delivery of static scripts and fonts in accordance with their respective privacy policies.</p>
+      </section>
+
+      <!-- Section 7 -->
+      <section class="legal-section">
+        <h2>7. Contact &amp; Questions</h2>
+        <p>If you have any questions regarding this Privacy Policy or the cryptographic design of the Syphr protocol, you can review the open-source code repository or contact the project maintainers through our official project documentation.</p>
+      </section>
+
+      <!-- Legal Footer -->
+      <footer class="legal-footer">
+        <div>&copy; 2026 Syphr Protocol. Zero-Retention Ephemeral Communication.</div>
+        <div style="display: flex; gap: 16px;">
+          <a href="/terms" class="legal-footer-link">Terms of Service</a>
+          <a href="/" class="legal-footer-link">Back to Chat</a>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      // Initialize Lucide icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // Theme synchronization
+      (function() {
+        const storedTheme = localStorage.getItem('syphr_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', storedTheme);
+
+        const toggleBtn = document.getElementById('theme-toggle-btn');
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('syphr_theme', next);
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
