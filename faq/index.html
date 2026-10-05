@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+    <title>Frequently Asked Questions // Syphr Ephemeral P2P Chat</title>
+    <meta name="description" content="Frequently asked questions about Syphr: WebRTC peer-to-peer connections, volatile RAM-only ephemerality, direct file transfers, and the emergency NUKE protocol." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Main App Stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body class="legal-page-body min-h-screen" style="min-height: 100vh; height: auto; overflow-y: auto;">
+    <!-- Top Navigation Bar -->
+    <header class="legal-header-bar">
+      <a href="/" class="legal-brand" title="Return to Syphr Chat">
+        <div class="logo-glyph" style="width: 22px; height: 22px; border: 1px solid var(--border); border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center;">
+          <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
+        </div>
+        <span>Syphr</span>
+      </a>
+
+      <div class="legal-nav-actions">
+        <a href="/privacy" class="legal-nav-btn">Privacy</a>
+        <a href="/terms" class="legal-nav-btn">Terms</a>
+        <button type="button" class="legal-nav-btn" id="theme-toggle-btn" title="Toggle visual theme" aria-label="Toggle visual theme">
+          <i data-lucide="sun-moon" style="width: 14px; height: 14px;"></i>
+        </button>
+        <a href="/" class="legal-nav-btn primary">
+          <span>Open Chat</span>
+          <i data-lucide="arrow-right" style="width: 13px; height: 13px;"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Scrollable Content Container -->
+    <main class="legal-container">
+      <div class="legal-hero">
+        <div class="legal-badge">
+          <i data-lucide="help-circle" style="width: 13px; height: 13px;"></i>
+          <span>Knowledge Base &amp; Protocol Architecture</span>
+        </div>
+        <h1 class="legal-title">Frequently Asked Questions</h1>
+        <p class="legal-subtitle">Everything you need to know about Syphr's WebRTC architecture, volatile RAM operation, file mechanics, and privacy guarantees.</p>
+      </div>
+
+      <!-- Quick Navigation Tabs -->
+      <nav class="legal-tab-nav" aria-label="Documentation navigation">
+        <a href="/faq" class="legal-tab-item active">FAQ</a>
+        <a href="/privacy" class="legal-tab-item">Privacy Policy</a>
+        <a href="/terms" class="legal-tab-item">Terms of Service</a>
+      </nav>
+
+      <!-- Key Philosophy Callout -->
+      <div class="legal-callout">
+        <div style="font-weight: 600; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+          <i data-lucide="shield-check" style="width: 15px; height: 15px; color: var(--accent);"></i>
+          <span>The Zero-Retention Philosophy</span>
+        </div>
+        Syphr operates without central databases, server message stores, or conversation backups. All communication occurs over direct, peer-to-peer DTLS data channels in volatile device memory (RAM). When you close the tab or hit NUKE, your data ceases to exist everywhere.
+      </div>
+
+      <!-- Live Search Box -->
+      <div class="faq-search-wrapper">
+        <i data-lucide="search" class="faq-search-icon" style="width: 16px; height: 16px;"></i>
+        <input type="text" id="faq-search" class="faq-search-input" placeholder="Search questions (e.g. WebRTC, RAM, NUKE, files, privacy)..." aria-label="Search FAQ" />
+      </div>
+
+      <!-- Topic Filter Pills -->
+      <div class="faq-category-pills" role="tablist">
+        <button type="button" class="faq-cat-btn active" data-category="all">All Topics</button>
+        <button type="button" class="faq-cat-btn" data-category="webrtc">WebRTC &amp; Connections</button>
+        <button type="button" class="faq-cat-btn" data-category="ram">RAM Ephemerality</button>
+        <button type="button" class="faq-cat-btn" data-category="files">File Transfers</button>
+        <button type="button" class="faq-cat-btn" data-category="nuke">NUKE Protocol</button>
+        <button type="button" class="faq-cat-btn" data-category="privacy">Privacy &amp; Security</button>
+      </div>
+
+      <!-- Accordion List -->
+      <div class="faq-list" id="faq-accordion-list">
+
+        <!-- Topic: WebRTC -->
+        <div class="faq-item" data-category="webrtc">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">WebRTC</span>
+              <span>How does Syphr connect two peers directly without a server?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>Syphr utilizes the native browser <strong>WebRTC (Web Real-Time Communication)</strong> standard, specifically <code>RTCDataChannel</code> and <code>RTCPeerConnection</code>.</p>
+            <p>Here is how the connection is formed:</p>
+            <ul>
+              <li><strong>Signaling Handshake:</strong> When you generate a room link or QR code, your browser creates a temporary cryptographic Session Description (SDP offer) and registers a random peer identity via transient signaling.</li>
+              <li><strong>Peer Exchange:</strong> When your peer opens your link or scans the QR code, their browser exchanges network candidates (ICE candidates) and sends an SDP answer.</li>
+              <li><strong>Direct Socket Link:</strong> Once the handshake completes, the signaling server drops out entirely. A direct, encrypted peer-to-peer data socket is established between your device and your peer's device. All subsequent text messages, photos, code snippets, and voice notes travel exclusively across this direct pipe.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="webrtc">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">WebRTC</span>
+              <span>Do my messages or media ever touch a relay or message database?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p><strong>No.</strong> Unlike traditional messaging platforms (such as Telegram, WhatsApp, or Slack), Syphr operates without any centralized message database, backend message broker, or cloud media repository.</p>
+            <p>Messages, binary file chunks, and audio recordings flow point-to-point directly between participating browsers over DTLS (Datagram Transport Layer Security). At no stage are payloads transmitted to, processed by, or saved on any server.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="webrtc">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">WebRTC</span>
+              <span>Does my peer see my IP address during WebRTC negotiation?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>Because WebRTC establishes a direct, socket-to-socket peer connection, browsers must exchange public routing endpoints (ICE candidates) so their devices can locate each other over the Internet.</p>
+            <p>As with all peer-to-peer architectures (e.g., BitTorrent or direct VoIP), your peer's browser can technically inspect the remote network candidate IP to route UDP packets directly. If you require complete network-level IP anonymity from your peer, we strongly recommend running a reputable Virtual Private Network (VPN) or Tor-compatible proxy before opening Syphr.</p>
+          </div>
+        </div>
+
+        <!-- Topic: RAM Ephemerality -->
+        <div class="faq-item" data-category="ram">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">RAM Ephemerality</span>
+              <span>What does "volatile RAM-only" mean in practice?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>When software stores data on a hard drive or SSD (persistent disk storage), that data persists even after your computer restarts and leaves digital forensics traces.</p>
+            <p>In contrast, <strong>RAM (Random Access Memory)</strong> is volatile storage: it exists only as momentary electrical state inside your computer's high-speed memory modules. Syphr holds conversation messages, decrypted image bitmaps, and audio buffers exclusively in JavaScript heap memory inside your browser process.</p>
+            <ul>
+              <li>No message history is ever written to <code>localStorage</code>, <code>sessionStorage</code>, or <code>IndexedDB</code>.</li>
+              <li>No media or voice notes are cached to disk.</li>
+              <li>The instant you close the browser tab, refresh the page, or click NUKE, the memory pointers are discarded and zeroed out by the browser engine.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="ram">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">RAM Ephemerality</span>
+              <span>If I refresh my tab or accidentally close my browser, can I recover my chat?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p><strong>No, recovery is technically impossible.</strong> This is an intentional security design choice, not a missing feature.</p>
+            <p>Because Syphr maintains zero server logs, zero database backups, and zero local disk storage, refreshing the page or closing the tab destroys the volatile memory state. Neither you, your peer, nor the creators of Syphr can retrieve past messages.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="ram">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">RAM Ephemerality</span>
+              <span>Why does the app store my UI theme or nickname if it is zero-retention?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>Syphr strictly isolates non-sensitive client preferences from private communications:</p>
+            <ul>
+              <li><strong>Zero Chat Data:</strong> Chat logs, images, voice clips, peer IDs, and cryptographic tokens are strictly excluded from local storage.</li>
+              <li><strong>Local UI Preferences Only:</strong> Only cosmetic display settings (your chosen dark/light visual theme, audio haptic mute toggle, and customized local nickname) are remembered in your personal browser storage so you don't have to re-select your preferred theme every visit. This data stays entirely on your device and is never sent to any server.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Topic: File Transfers -->
+        <div class="faq-item" data-category="files">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">File Transfers</span>
+              <span>How does direct peer file sharing work?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>When you attach a file or photo, your browser reads the file locally into an <code>ArrayBuffer</code> using the HTML5 File API.</p>
+            <ul>
+              <li>The file is segmented into 16KB binary chunks.</li>
+              <li>Each chunk is transmitted directly through the WebRTC <code>RTCDataChannel</code> using binary transport.</li>
+              <li>The recipient's browser reassembles the chunks in RAM into a temporary <code>Blob</code> and renders a volatile <code>URL.createObjectURL()</code>.</li>
+              <li>No intermediate file upload server, Amazon S3 bucket, or temporary file host is ever involved.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="files">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">File Transfers</span>
+              <span>What are "View-Once" media attachments?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>Syphr provides a dedicated View-Once mode for sensitive images:</p>
+            <ul>
+              <li>When sent with View-Once enabled, the photo arrives in an obscured, locked state.</li>
+              <li>When the recipient clicks to view the photo in the full-screen ephemeral lightbox, an immediate countdown begins.</li>
+              <li>Once dismissed or when the view period finishes, the underlying in-memory Blob URL is revoked via <code>URL.revokeObjectURL()</code>, and the DOM container is replaced with a "Viewed &amp; Vaporized" indicator. It cannot be reopened or downloaded.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="files">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">File Transfers</span>
+              <span>What file types and sizes are supported?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>Syphr supports a wide array of formats including JPEG, PNG, WEBP, GIF, PDF, plain text, ZIP, JSON, Python, JavaScript, TypeScript, Markdown, and CSV files.</p>
+            <p>Because transfers occur over in-memory WebRTC DataChannels, files under 25MB transfer almost instantaneously. Very large files are limited primarily by browser heap memory to preserve UI responsiveness.</p>
+          </div>
+        </div>
+
+        <!-- Topic: NUKE Protocol -->
+        <div class="faq-item" data-category="nuke">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">NUKE Protocol</span>
+              <span>What happens when I press the emergency NUKE button?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>The <strong>NUKE</strong> button is Syphr's instant panic wipe protocol. When triggered, the client executes a synchronous multi-stage memory purge:</p>
+            <ul>
+              <li><strong>Connection Severance:</strong> The active WebRTC <code>RTCDataChannel</code> and <code>RTCPeerConnection</code> sockets are forcefully closed.</li>
+              <li><strong>Signaling Disconnect:</strong> The peer signaling instance is permanently destroyed.</li>
+              <li><strong>DOM Incineration:</strong> The entire chat stream container, message nodes, media elements, and message queues are removed from the browser DOM.</li>
+              <li><strong>Object URL Revocation:</strong> All temporary Blob URLs representing audio notes and images are invalidated using <code>URL.revokeObjectURL()</code>.</li>
+              <li><strong>Heap De-allocation:</strong> Internal JavaScript arrays and state objects are set to <code>null</code>, triggering browser garbage collection.</li>
+              <li><strong>Visual Flash &amp; Reload:</strong> A white emergency flash overlay displays for 200ms before clearing the URL hash and resetting the app to a clean slate.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="nuke">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">NUKE Protocol</span>
+              <span>Does NUKE wipe my peer's screen as well?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>When you click NUKE, a final instantaneous <code>nuke</code> protocol payload is transmitted across the data channel before your connection terminates, notifying your peer's client that the session has been incinerated.</p>
+            <p>Their connection drops to Disconnected immediately. If you have auto-burn timers configured, any unburned messages on either side will also vaporize according to their burn intervals.</p>
+          </div>
+        </div>
+
+        <!-- Topic: Privacy & Security -->
+        <div class="faq-item" data-category="privacy">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">Privacy &amp; Security</span>
+              <span>How are voice notes recorded and does anyone listen to them?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>When you tap the microphone button, your browser requests permission to access your audio hardware via <code>navigator.mediaDevices.getUserMedia</code>.</p>
+            <ul>
+              <li>Audio data is recorded using the standard browser <code>MediaRecorder</code> API into temporary memory chunks.</li>
+              <li>As soon as you release or stop recording, audio capture hardware is stopped, and all audio tracks are closed immediately.</li>
+              <li>The audio is encoded into an in-memory WebM audio blob, transmitted directly to your peer over the WebRTC data channel, and never submitted to any speech-to-text API or third-party server.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="privacy">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">Privacy &amp; Security</span>
+              <span>Does Syphr use cookies, tracking pixels, or Google Analytics?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p><strong>None.</strong> Syphr contains zero tracking pixels, zero analytics scripts (no Google Analytics, no Mixpanel, no Meta Pixel), and zero advertising cookies.</p>
+            <p>We do not collect telemetry, track browsing behavior, or build user profiles. We believe private communication should be truly private.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="privacy">
+          <button class="faq-trigger" aria-expanded="false">
+            <span class="faq-trigger-title">
+              <span class="faq-topic-tag">Privacy &amp; Security</span>
+              <span>What encryption protects messages in transit?</span>
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="faq-content">
+            <p>All WebRTC peer-to-peer data channels mandate <strong>DTLS (Datagram Transport Layer Security)</strong> encryption with ephemeral cryptographic keys generated independently by the two connecting browsers during the ICE handshake.</p>
+            <p>This ensures that intermediate network operators, Wi-Fi routers, and internet service providers cannot inspect, alter, or inject traffic into your communication stream.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Still Have Questions Callout -->
+      <div class="legal-callout" style="margin-top: 36px; border-left-color: var(--accent-cyan);">
+        <div style="font-weight: 600; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+          <i data-lucide="info" style="width: 15px; height: 15px; color: var(--accent-cyan);"></i>
+          <span>Ready to start a session?</span>
+        </div>
+        Launch Syphr in any modern browser, share your temporary invite code or QR code with a peer, and enjoy private, ephemeral peer-to-peer conversation.
+        <div style="margin-top: 12px;">
+          <a href="/" class="legal-nav-btn primary" style="display: inline-flex;">
+            <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
+            <span>Launch Ephemeral Chat</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Legal Footer -->
+      <footer class="legal-footer">
+        <div>&copy; 2026 Syphr Protocol. Zero-Retention Ephemeral Communication.</div>
+        <div style="display: flex; gap: 16px;">
+          <a href="/privacy" class="legal-footer-link">Privacy Policy</a>
+          <a href="/terms" class="legal-footer-link">Terms of Service</a>
+          <a href="/" class="legal-footer-link">Back to Chat</a>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      // Initialize Lucide icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // Theme synchronization with Syphr storage
+      (function() {
+        const storedTheme = localStorage.getItem('syphr_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', storedTheme);
+
+        const toggleBtn = document.getElementById('theme-toggle-btn');
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('syphr_theme', next);
+          });
+        }
+      })();
+
+      // Accordion toggle behavior
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const trigger = item.querySelector('.faq-trigger');
+        if (trigger) {
+          trigger.addEventListener('click', () => {
+            const isOpen = item.classList.contains('open');
+            // Toggle clicked item
+            if (isOpen) {
+              item.classList.remove('open');
+              trigger.setAttribute('aria-expanded', 'false');
+            } else {
+              item.classList.add('open');
+              trigger.setAttribute('aria-expanded', 'true');
+            }
+          });
+        }
+      });
+
+      // Search filtering logic
+      const searchInput = document.getElementById('faq-search');
+      const catButtons = document.querySelectorAll('.faq-cat-btn');
+
+      let currentCategory = 'all';
+
+      function filterFaqs() {
+        const query = (searchInput.value || '').trim().toLowerCase();
+
+        faqItems.forEach(item => {
+          const itemCat = item.getAttribute('data-category');
+          const title = item.querySelector('.faq-trigger-title').textContent.toLowerCase();
+          const content = item.querySelector('.faq-content').textContent.toLowerCase();
+
+          const matchesCat = (currentCategory === 'all' || itemCat === currentCategory);
+          const matchesQuery = (!query || title.includes(query) || content.includes(query));
+
+          if (matchesCat && matchesQuery) {
+            item.style.display = 'block';
+            if (query && matchesQuery) {
+              item.classList.add('open');
+              item.querySelector('.faq-trigger').setAttribute('aria-expanded', 'true');
+            }
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', filterFaqs);
+      }
+
+      catButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          catButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentCategory = btn.getAttribute('data-category');
+          filterFaqs();
+        });
+      });
+
+      // Check URL hash for direct question open (e.g. #nuke, #webrtc)
+      const initialHash = window.location.hash.replace('#', '').toLowerCase();
+      if (initialHash) {
+        const matchItem = document.querySelector(`.faq-item[data-category="${initialHash}"]`);
+        if (matchItem) {
+          matchItem.classList.add('open');
+          matchItem.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    </script>
+  </body>
+</html>
